@@ -1,0 +1,24 @@
+Rss generator za Oglasno desko Pravne fakultete, Uni-lj
+ -> http://www.pf.uni-lj.si/oglasna-deska/
+
+Spisal, ker je uradni rss f00.
+ - lag
+ - linki na nek X strežnik 
+ - ni rss po letnikih, ampak za vse skupaj (useless)
+
+Kako je narejen
+ - urllib2 za wget-anje, PyRSSGen2 za generiranje rss-ja, BeatifoulSoup za parsanje html-ja
+ - dictionary "feeds" vsebuje nastavitve za vseh 5 feedov (1..4 letnik, absolventi)
+ - usage: python2.5 mk_pf_rss.py "1. letnik"
+ - to dol potegne html stran z zadnjimi 15 novicami, ven potegne samo content, zradi rss xml in ga zapise v ciljno datoteko
+ - priporočam poganjanje na 10 min iz crontaba
+
+todo
+ - attachmenti
+ - rss izpitnih rokov
+ - ura objave novice (je ni na strani)
+ - izboljsaj dokumentacijo) 
+ - ...
+
+kudos:
+ - Matija Šuklje (testiranje)
