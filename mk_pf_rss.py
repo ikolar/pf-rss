@@ -11,7 +11,7 @@ import sys
 def get_novica_content(soup):
 	# \n<h1>TIZLE</h1> ..... <div class="content_footer">...
 	contents = soup.find('div', id='content')
-	title = contents.h1.string
+#	title = contents.h1.string
 
 	# the content is a bit tricky, cause it's a mixed bag of Tag-s and NavigatableString-s
 	# and we want the part from the </h1> to <div class="content_footer">
@@ -27,8 +27,43 @@ def get_novica_content(soup):
 
 		if (start):
 			real_contents += unicode(child)
+	real_contents = real_contents.strip()
+	
+	datoteke = find_attachments(soup)
+	if (datoteke):
+		real_contents += "<p>Datoteke:</p>"
+		for datoteka in datoteke:
+			real_contents += unicode(datoteka)
 
-	return real_contents.strip()
+	return real_contents
+
+def find_attachments(soup):
+	"""
+		find attachments, if any
+		returns None, or list of soup elements for each attachment
+	"""
+	datoteke = []
+	boxes = soup.findAll('div', { 'class' : 'box'} )
+	for box in boxes:
+		first_child = box.contents[0]
+		title = first_child.string.rstrip('\n')
+		if ("Datoteke" == title):
+			for datoteka in box.findAll('div', {'class' : 'item'}):
+				absolutize_url(datoteka.find('a'), 'href')
+				for img in datoteka.findAll('img'):
+					absolutize_url(img, 'src')				
+
+				datoteke.append(datoteka)
+
+	return datoteke
+
+def absolutize_url(element, url_attribute):
+	try:
+		url = element[url_attribute]
+		if not url.startswith('http://'):
+			element[url_attribute] = "http://www.pf.uni-lj.si/" + url
+	except KeyError:
+		pass
 
 def get_latest_novice_in_category(soup):
 	""" return a list of maps, one per novice. keys are ["title", "date", "author", "url"]
