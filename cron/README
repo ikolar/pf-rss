@@ -1,0 +1,5 @@
+Utilities.
+
+A bash script that calls the rss creator for each year.
+And a crontab that will call the bashscript itself every 10 mins or so.
+

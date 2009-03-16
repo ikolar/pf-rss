@@ -1,0 +1,2 @@
+# run this every 10 minutes
+*/6 * * * * mk_pf_rss.sh
